@@ -3,10 +3,10 @@ import { google } from 'googleapis';
 // The specific tabs required by the user
 const TARGET_SHEETS = [
     "Turma 3",
-    "Turma 4 (essencial)",
+    "Turma 4 (Essencial)",
     "Turma 4 (Online)",
     "Turma 5",
-    "Turma 5 (online)"
+    "Turma 5 (Online)"
 ];
 
 export interface StudentRecord {

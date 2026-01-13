@@ -35,7 +35,7 @@ export async function POST(
         const studentName = student['Nome Completo'] || student['NOME COMPLETO'] || student['nome completo'] || 'Aluno';
         const studentCpf = student['CPF'] || student['cpf'] || student['Cpf'] || cpf;
         const studentStatus = student['Situação Cadastral'] || student['SITUAÇÃO CADASTRAL'] || student['Situacao Cadastral'] || 'ATIVO';
-        const studentMatricula = student['Data da matrícula'] || student['Data da Matrícula'] || student['DATA DE MATRÍCULA'] || '';
+        const studentMatricula = student['DATA DE MATRÍCULA'] || student['Data de Matrícula'] || student['Data da matrícula'] || student['Data da Matrícula'] || '';
         const studentTurma = student['Turma'] || student['TURMA'] || student['turma'] || '';
 
         if (studentStatus.toUpperCase() === 'DISTRATO') {
