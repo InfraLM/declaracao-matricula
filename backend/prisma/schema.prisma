@@ -1,0 +1,31 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "rhel-openssl-1.0.x", "rhel-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model LogDeclaracao {
+  id              Int      @id @default(autoincrement())
+  emailUsuario    String   @map("email_usuario")
+  nomeAluno       String   @map("nome_aluno")
+  cpfAluno        String   @map("cpf_aluno")
+  statusPagamento String?  @map("status_pagamento")
+  warningExibido  Boolean  @default(false) @map("warning_exibido")
+  dataGeracao     DateTime @default(now()) @map("data_geracao")
+
+  @@map("logs_declaracoes")
+}
+
+model LogAcesso {
+  id           Int      @id @default(autoincrement())
+  emailUsuario String   @map("email_usuario")
+  ipAddress    String?  @map("ip_address")
+  userAgent    String?  @map("user_agent")
+  dataAcesso   DateTime @default(now()) @map("data_acesso")
+
+  @@map("logs_acesso")
+}

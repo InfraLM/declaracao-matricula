@@ -1,0 +1,13 @@
+{
+  "/_global-error/page": "/_global-error",
+  "/_not-found/page": "/_not-found",
+  "/aluno/[cpf]/page": "/aluno/[cpf]",
+  "/api/auth/[...nextauth]/route": "/api/auth/[...nextauth]",
+  "/api/students/[cpf]/generate/route": "/api/students/[cpf]/generate",
+  "/api/students/[cpf]/route": "/api/students/[cpf]",
+  "/api/students/search/route": "/api/students/search",
+  "/busca/page": "/busca",
+  "/favicon.ico/route": "/favicon.ico",
+  "/login/page": "/login",
+  "/page": "/"
+}

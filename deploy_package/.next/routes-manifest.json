@@ -1,0 +1,128 @@
+{
+  "version": 3,
+  "pages404": true,
+  "appType": "app",
+  "caseSensitive": false,
+  "basePath": "/gerador-matricula",
+  "redirects": [
+    {
+      "source": "/gerador-matricula/",
+      "destination": "/gerador-matricula",
+      "basePath": false,
+      "internal": true,
+      "priority": true,
+      "statusCode": 308,
+      "regex": "^/gerador-matricula/$"
+    },
+    {
+      "source": "/:path+/",
+      "destination": "/:path+",
+      "internal": true,
+      "priority": true,
+      "statusCode": 308,
+      "regex": "^(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))/$"
+    }
+  ],
+  "headers": [],
+  "rewrites": {
+    "beforeFiles": [],
+    "afterFiles": [],
+    "fallback": []
+  },
+  "dynamicRoutes": [
+    {
+      "page": "/aluno/[cpf]",
+      "regex": "^/aluno/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPcpf": "nxtPcpf"
+      },
+      "namedRegex": "^/aluno/(?<nxtPcpf>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/api/auth/[...nextauth]",
+      "regex": "^/api/auth/(.+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPnextauth": "nxtPnextauth"
+      },
+      "namedRegex": "^/api/auth/(?<nxtPnextauth>.+?)(?:/)?$"
+    },
+    {
+      "page": "/api/students/[cpf]",
+      "regex": "^/api/students/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPcpf": "nxtPcpf"
+      },
+      "namedRegex": "^/api/students/(?<nxtPcpf>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/api/students/[cpf]/generate",
+      "regex": "^/api/students/([^/]+?)/generate(?:/)?$",
+      "routeKeys": {
+        "nxtPcpf": "nxtPcpf"
+      },
+      "namedRegex": "^/api/students/(?<nxtPcpf>[^/]+?)/generate(?:/)?$"
+    }
+  ],
+  "staticRoutes": [
+    {
+      "page": "/",
+      "regex": "^/(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/(?:/)?$"
+    },
+    {
+      "page": "/_global-error",
+      "regex": "^/_global\\-error(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/_global\\-error(?:/)?$"
+    },
+    {
+      "page": "/_not-found",
+      "regex": "^/_not\\-found(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/_not\\-found(?:/)?$"
+    },
+    {
+      "page": "/api/students/search",
+      "regex": "^/api/students/search(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/students/search(?:/)?$"
+    },
+    {
+      "page": "/busca",
+      "regex": "^/busca(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/busca(?:/)?$"
+    },
+    {
+      "page": "/favicon.ico",
+      "regex": "^/favicon\\.ico(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/favicon\\.ico(?:/)?$"
+    },
+    {
+      "page": "/login",
+      "regex": "^/login(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/login(?:/)?$"
+    }
+  ],
+  "dataRoutes": [],
+  "rsc": {
+    "header": "rsc",
+    "varyHeader": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch",
+    "prefetchHeader": "next-router-prefetch",
+    "didPostponeHeader": "x-nextjs-postponed",
+    "contentTypeHeader": "text/x-component",
+    "suffix": ".rsc",
+    "prefetchSegmentHeader": "next-router-segment-prefetch",
+    "prefetchSegmentSuffix": ".segment.rsc",
+    "prefetchSegmentDirSuffix": ".segments",
+    "clientParamParsing": false,
+    "dynamicRSCPrerender": false
+  },
+  "rewriteHeaders": {
+    "pathHeader": "x-nextjs-rewritten-path",
+    "queryHeader": "x-nextjs-rewritten-query"
+  }
+}
