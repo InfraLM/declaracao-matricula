@@ -122,18 +122,9 @@ export async function gerarDeclaracaoPDF(dados: DadosAluno): Promise<Uint8Array>
 
     y -= lineHeight * 4;
 
-    // --- DATE LOGIC (RF08 - Turma 5 Rule) ---
-    // Turmas 1, 2, 3, 4: Use Matriculation Date
-    // Turma 5A: 01/02/2025
-    // Turma 5B: 01/05/2025
-    let dataInicio = dados.dataMatricula;
-    const turmaUpper = (dados.turma || "").toUpperCase();
-
-    if (turmaUpper.includes("5B")) {
-        dataInicio = "01/05/2025";
-    } else if (turmaUpper.includes("5A") || turmaUpper.includes("TURMA 5")) {
-        dataInicio = "01/02/2025";
-    }
+    // --- DATE LOGIC ---
+    // Sempre usar a data de matrícula do aluno para todas as turmas
+    const dataInicio = dados.dataMatricula;
 
     // Corpo do texto
     const cpfFormatado = formatarCPF(dados.cpf);

@@ -1,19 +1,16 @@
 import { google } from 'googleapis';
 
-// The specific tabs required by the user
-const TARGET_SHEETS = [
-    "Turma 3",
-    "Turma 4 (Essencial)",
-    "Turma 4 (Online)",
-    "Turma 5",
-    "Turma 5 (Online)"
-];
+// Configuration for each sheet with its specific header row index
+// Header row index is 0-based (0 = row 1, 1 = row 2, etc.)
+const SHEET_CONFIG: { [key: string]: { headerRowIndex: number } } = {
+    "Turma 3": { headerRowIndex: 1 },           // Header in row 2
+    "Turma 4 (Essencial)": { headerRowIndex: 1 }, // Header in row 2
+    "Turma 4 (Online)": { headerRowIndex: 0 },    // Header in row 1
+    "Turma 5": { headerRowIndex: 1 },           // Header in row 2
+    "Turma 5 (Online)": { headerRowIndex: 3 },    // Header in row 4
+};
 
-// Sheets that have headers in row 1 (index 0) instead of row 2 (index 1)
-const SHEETS_WITH_HEADER_ROW_0 = [
-    "Turma 4 (Online)",
-    "Turma 5 (Online)"
-];
+const TARGET_SHEETS = Object.keys(SHEET_CONFIG);
 
 export interface StudentRecord {
     [key: string]: string;
@@ -63,12 +60,17 @@ export async function getStudentData(): Promise<StudentRecord[]> {
             const rows = response.data.values;
             if (!rows || rows.length < 2) return [];
 
-            // Determine header row index based on sheet type
-            const HEADER_ROW_INDEX = SHEETS_WITH_HEADER_ROW_0.includes(sheetName) ? 0 : 1;
-            const headers = rows[HEADER_ROW_INDEX].map((h: string) => h.trim());
+            // Get header row index from config
+            const config = SHEET_CONFIG[sheetName];
+            const HEADER_ROW_INDEX = config ? config.headerRowIndex : 1;
+            
+            // Make sure we have enough rows
+            if (rows.length <= HEADER_ROW_INDEX) return [];
+            
+            const headers = rows[HEADER_ROW_INDEX].map((h: string) => h?.trim() || '');
             const dataRows = rows.slice(HEADER_ROW_INDEX + 1);
 
-            console.log(`Sheet "${sheetName}": Header row ${HEADER_ROW_INDEX + 1}, ${dataRows.length} data rows`);
+            console.log(`Sheet "${sheetName}": Header row ${HEADER_ROW_INDEX + 1}, Headers: ${headers.slice(0, 5).join(', ')}..., ${dataRows.length} data rows`);
 
             return dataRows.map((row: any[]) => {
                 const student: any = { sourceSheet: sheetName };
