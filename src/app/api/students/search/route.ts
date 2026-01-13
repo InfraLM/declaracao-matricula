@@ -1,17 +1,42 @@
 import { NextResponse } from 'next/server';
+import { getStudentData } from '@/lib/sheets';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
 
 export async function GET(request: Request) {
-    const { searchParams } = new URL(request.url);
-    const query = searchParams.get('q') || '';
-
-    const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
-
     try {
-        const response = await fetch(`${backendUrl}/api/students/search?q=${encodeURIComponent(query)}`);
-        const data = await response.json();
-        return NextResponse.json(data);
+        // 1. Check Authentication
+        const session = await getServerSession(authOptions);
+        if (!session) {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        }
+
+        // 2. Parse Query
+        const { searchParams } = new URL(request.url);
+        const query = searchParams.get('q')?.toLowerCase() || '';
+
+        if (!query) {
+            return NextResponse.json({ data: [] });
+        }
+
+        // 3. Fetch Data from Google Sheets
+        const students = await getStudentData();
+
+        // 4. Filter
+        const filtered = students.filter((student) => {
+            const nome = student['Nome Completo']?.toLowerCase() || '';
+            const cpf = student['CPF'] || '';
+
+            return nome.includes(query) || cpf.includes(query);
+        });
+
+        // 5. Limit results
+        const limited = filtered.slice(0, 20);
+
+        return NextResponse.json({ data: limited });
+
     } catch (error) {
-        console.error('Frontend Proxy Error:', error);
-        return NextResponse.json({ error: 'Failed to fetch from backend' }, { status: 500 });
+        console.error('Search API Error:', error);
+        return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
 }
