@@ -24,7 +24,7 @@ export async function GET(request: Request) {
 
         // 4. Filter
         const filtered = students.filter((student) => {
-            const nome = student['Nome Completo']?.toLowerCase() || '';
+            const nome = (student['Nome Completo'] || student['NOME COMPLETO'] || student['NOME'] || student['Nome'] || '')?.toLowerCase() || '';
             const cpf = student['CPF'] || '';
 
             return nome.includes(query) || cpf.includes(query);

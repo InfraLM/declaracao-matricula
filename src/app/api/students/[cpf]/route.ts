@@ -32,7 +32,14 @@ export async function GET(
             return NextResponse.json({ error: 'Student not found' }, { status: 404 });
         }
 
-        return NextResponse.json({ data: student });
+        // Normalize student data for consistent response
+        const normalizedStudent = {
+            ...student,
+            'Nome Completo': student['Nome Completo'] || student['NOME COMPLETO'] || student['NOME'] || student['Nome'] || '',
+            'Data da Matrícula': student['Data da Matrícula'] || student['DATA DE MATRÍCULA'] || student['Data de Matrícula'] || student['Data da matrícula'] || student['DATA DA MATRÍCULA'] || '',
+        };
+
+        return NextResponse.json({ data: normalizedStudent });
 
     } catch (error) {
         console.error('Student API Error:', error);

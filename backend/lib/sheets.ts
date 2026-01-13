@@ -9,6 +9,12 @@ const TARGET_SHEETS = [
     "Turma 5 (Online)"
 ];
 
+// Sheets that have headers in row 1 (index 0) instead of row 2 (index 1)
+const SHEETS_WITH_HEADER_ROW_0 = [
+    "Turma 4 (Online)",
+    "Turma 5 (Online)"
+];
+
 export interface StudentRecord {
     [key: string]: string;
 }
@@ -16,14 +22,6 @@ export interface StudentRecord {
 // Helper to pad CPF with leading zeros
 function normalizeCPF(cpf: string): string {
     if (!cpf) return '';
-    // Remove non-numeric characters first to check potential length? 
-    // Or just keep it as is if it already has punctuation?
-    // User said "cpfs começando com 0 perdem a formatação". 
-    // Usually this means they become digits like 1234567890 instead of 01234567890.
-    // We will remove non-digits, pad to 11, and then optionally re-format if needed.
-    // For now, let's just ensure we have the digits, maybe user wants formatted?
-    // "cpfs que tiverem menos de 11 digitos teremos que adicionar zeros na frente"
-
     const digitsOnly = cpf.replace(/\D/g, '');
     return digitsOnly.padStart(11, '0');
 }
@@ -55,7 +53,6 @@ export async function getStudentData(): Promise<StudentRecord[]> {
 
     console.log('Fetching data from sheets:', TARGET_SHEETS.join(', '));
 
-    // We can fetch them in parallel for speed
     const promises = TARGET_SHEETS.map(async (sheetName) => {
         try {
             const response = await sheets.spreadsheets.values.get({
@@ -66,14 +63,15 @@ export async function getStudentData(): Promise<StudentRecord[]> {
             const rows = response.data.values;
             if (!rows || rows.length < 2) return [];
 
-            // Assumption: All these sheets share the same structure 
-            // where Row 2 (index 1) contains the headers.
-            const HEADER_ROW_INDEX = 1;
+            // Determine header row index based on sheet type
+            const HEADER_ROW_INDEX = SHEETS_WITH_HEADER_ROW_0.includes(sheetName) ? 0 : 1;
             const headers = rows[HEADER_ROW_INDEX].map((h: string) => h.trim());
             const dataRows = rows.slice(HEADER_ROW_INDEX + 1);
 
+            console.log(`Sheet "${sheetName}": Header row ${HEADER_ROW_INDEX + 1}, ${dataRows.length} data rows`);
+
             return dataRows.map((row: any[]) => {
-                const student: any = { sourceSheet: sheetName }; // Track source
+                const student: any = { sourceSheet: sheetName };
                 headers.forEach((header, index) => {
                     if (header) {
                         let value = (row[index] || '').toString().trim();
@@ -91,7 +89,7 @@ export async function getStudentData(): Promise<StudentRecord[]> {
 
         } catch (error) {
             console.warn(`Failed to read sheet "${sheetName}":`, error);
-            return []; // Return empty for this sheet but continue others
+            return [];
         }
     });
 
