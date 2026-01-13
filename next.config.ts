@@ -3,8 +3,8 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   /* config options here */
   reactCompiler: true,
-  output: 'standalone',
-  basePath: process.env.NODE_ENV === 'production' ? '/gerador-matricula' : '',
+  // Vercel gerencia o build automaticamente, não precisa de standalone
+  // basePath removido para funcionar com URL automática da Vercel
 };
 
 export default nextConfig;

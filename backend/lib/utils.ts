@@ -5,7 +5,8 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export const BASE_PATH = process.env.NODE_ENV === 'production' ? '/gerador-matricula' : '';
+// BASE_PATH vazio para funcionar com URL raiz da Vercel
+export const BASE_PATH = '';
 
 /**
  * Retorna o objeto Date atual ajustado para o fuso de São Paulo (GMT-3).
